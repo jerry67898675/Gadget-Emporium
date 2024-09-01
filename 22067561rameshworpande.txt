@@ -1,0 +1,981 @@
+SQL> Drop Table Customers;
+Drop Table Customers
+           *
+ERROR at line 1:
+ORA-02449: unique/primary keys in table referenced by foreign keys 
+
+
+SQL> Drop table categories;
+Drop table categories
+           *
+ERROR at line 1:
+ORA-02449: unique/primary keys in table referenced by foreign keys 
+
+
+SQL> Drop Table Orders;
+Drop Table Orders
+           *
+ERROR at line 1:
+ORA-02449: unique/primary keys in table referenced by foreign keys 
+
+
+SQL> Drop Table Invoices;
+
+Table dropped.
+
+SQL> Drop Table Vendors ;
+Drop Table Vendors 
+           *
+ERROR at line 1:
+ORA-02449: unique/primary keys in table referenced by foreign keys 
+
+
+SQL> Drop Table productCategory;
+Drop Table productCategory
+           *
+ERROR at line 1:
+ORA-02449: unique/primary keys in table referenced by foreign keys 
+
+
+SQL> Drop Table Products;
+Drop Table Products
+           *
+ERROR at line 1:
+ORA-02449: unique/primary keys in table referenced by foreign keys 
+
+
+SQL> Drop Table OrderProduct;
+
+Table dropped.
+
+SQL> 
+SQL> 
+SQL> CREATE TABLE Categories (
+  2      category_id NUMBER PRIMARY KEY,
+  3      category_name VARCHAR(40),
+  4      discount_rate DECIMAL(3,2)
+  5  );
+CREATE TABLE Categories (
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+SQL> 
+SQL> CREATE TABLE Customers (
+  2      customer_id NUMBER PRIMARY KEY,
+  3      category_id NUMBER,
+  4      customer_name VARCHAR(45),
+  5      customer_phone VARCHAR(14),
+  6      customer_address VARCHAR(60),
+  7      FOREIGN KEY (category_id) REFERENCES categories (category_id)
+  8  );
+CREATE TABLE Customers (
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+SQL> 
+SQL> CREATE TABLE Orders (
+  2      order_id NUMBER PRIMARY KEY,
+  3      customer_id NUMBER,
+  4      order_date DATE,
+  5      total_order_amount DECIMAL(10,2),
+  6      FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
+  7  );
+CREATE TABLE Orders (
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+SQL> 
+SQL> CREATE TABLE Invoices (
+  2      invoice_id NUMBER PRIMARY KEY,
+  3      order_id NUMBER,
+  4      customer_id NUMBER,
+  5      payment_option VARCHAR(20),
+  6      total_amount DECIMAL(10,2),
+  7      FOREIGN KEY (order_id) REFERENCES Orders(order_id),
+  8      FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
+  9  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE Vendors (
+  2      vendor_id NUMBER PRIMARY KEY,
+  3      vendor_name VARCHAR(45),
+  4      vendor_phone_number VARCHAR(14)
+  5  );
+CREATE TABLE Vendors (
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+SQL> 
+SQL> CREATE TABLE productCategory (
+  2      category_id NUMBER PRIMARY KEY,
+  3      category_name VARCHAR(50)
+  4  );
+CREATE TABLE productCategory (
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+SQL> 
+SQL> CREATE TABLE Products (
+  2      product_id NUMBER PRIMARY KEY,
+  3      product_name VARCHAR(60),
+  4      description VARCHAR(60),
+  5      category_id NUMBER,
+  6      price DECIMAL(10,2),
+  7      stock_quantity NUMBER,
+  8      vendor_id NUMBER,
+  9      FOREIGN KEY (category_id) REFERENCES productCategory(category_id),
+ 10      FOREIGN KEY (vendor_id) REFERENCES Vendors(vendor_id)
+ 11  );
+CREATE TABLE Products (
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+SQL> 
+SQL> 
+SQL> CREATE TABLE OrderProduct (
+  2      order_id NUMBER,
+  3      product_id NUMBER,
+  4      quantity NUMBER,
+  5      unit_price DECIMAL(10,2),
+  6      PRIMARY KEY (order_id, product_id),
+  7      FOREIGN KEY (order_id) REFERENCES Orders(order_id),
+  8      FOREIGN KEY (product_id) REFERENCES Products(product_id)
+  9  );
+
+Table created.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> INSERT INTO Categories (category_id, category_name, discount_rate) VALUES
+  2  (1, 'Regular', 0.00);
+INSERT INTO Categories (category_id, category_name, discount_rate) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007421) violated 
+
+
+SQL> INSERT INTO Categories (category_id, category_name, discount_rate) VALUES
+  2  (2, 'Staff', 0.05);
+INSERT INTO Categories (category_id, category_name, discount_rate) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007421) violated 
+
+
+SQL> INSERT INTO Categories (category_id, category_name, discount_rate) VALUES
+  2  (3, 'VIP', 0.10);
+INSERT INTO Categories (category_id, category_name, discount_rate) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007421) violated 
+
+
+SQL> 
+SQL> 
+SQL> INSERT INTO Customers (customer_id, category_id, customer_name, customer_phone, customer_address) VALUES
+  2  (101, 1, 'Rajesh Shrestha', '977-9841234567', 'Kathmandu, Nepal');
+INSERT INTO Customers (customer_id, category_id, customer_name, customer_phone, customer_address) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007422) violated 
+
+
+SQL> INSERT INTO Customers (customer_id, category_id, customer_name, customer_phone, customer_address) VALUES
+  2  (102, 3, 'Sita Thapa', '977-9819876543', 'Pokhara, Nepal');
+INSERT INTO Customers (customer_id, category_id, customer_name, customer_phone, customer_address) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007422) violated 
+
+
+SQL> INSERT INTO Customers (customer_id, category_id, customer_name, customer_phone, customer_address) VALUES
+  2  (103, 2, 'Amit Khanal', '977-9851122334', 'Bhaktapur, Nepal');
+INSERT INTO Customers (customer_id, category_id, customer_name, customer_phone, customer_address) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007422) violated 
+
+
+SQL> INSERT INTO Customers (customer_id, category_id, customer_name, customer_phone, customer_address) VALUES
+  2  (104, 1, 'Anita Rai', '977-9808765432', 'Lalitpur, Nepal');
+INSERT INTO Customers (customer_id, category_id, customer_name, customer_phone, customer_address) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007422) violated 
+
+
+SQL> INSERT INTO Customers (customer_id, category_id, customer_name, customer_phone, customer_address) VALUES
+  2  (105, 2, 'Bibek Joshi', '977-9861122334', 'Butwal, Nepal');
+INSERT INTO Customers (customer_id, category_id, customer_name, customer_phone, customer_address) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007422) violated 
+
+
+SQL> INSERT INTO Customers (customer_id, category_id, customer_name, customer_phone, customer_address) VALUES
+  2  (106, 3, 'Neha Sharma', '977-9843322111', 'Dharan, Nepal');
+INSERT INTO Customers (customer_id, category_id, customer_name, customer_phone, customer_address) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007422) violated 
+
+
+SQL> INSERT INTO Customers (customer_id, category_id, customer_name, customer_phone, customer_address) VALUES
+  2  (107, 1, 'Suresh Tamang', '977-9812345678', 'Kathmandu, Nepal');
+INSERT INTO Customers (customer_id, category_id, customer_name, customer_phone, customer_address) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007422) violated 
+
+
+SQL> INSERT INTO Customers (customer_id, category_id, customer_name, customer_phone, customer_address) VALUES
+  2  (108, 3, 'Rina Ghimire', '977-9845678901', 'Pokhara, Nepal');
+INSERT INTO Customers (customer_id, category_id, customer_name, customer_phone, customer_address) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007422) violated 
+
+
+SQL> INSERT INTO Customers (customer_id, category_id, customer_name, customer_phone, customer_address) VALUES
+  2  (109, 2, 'Rajan Magar', '977-9851122334', 'Bhaktapur, Nepal');
+INSERT INTO Customers (customer_id, category_id, customer_name, customer_phone, customer_address) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007422) violated 
+
+
+SQL> INSERT INTO Customers (customer_id, category_id, customer_name, customer_phone, customer_address) VALUES
+  2  (110, 3, 'Anjali Bhattarai', '977-9808765432', 'Lalitpur, Nepal');
+INSERT INTO Customers (customer_id, category_id, customer_name, customer_phone, customer_address) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007422) violated 
+
+
+SQL> 
+SQL> INSERT INTO Orders (order_id, customer_id, order_date, total_order_amount) VALUES
+  2  (1001, 101, '12-JAN-2023', 1500.00);
+INSERT INTO Orders (order_id, customer_id, order_date, total_order_amount) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007424) violated 
+
+
+SQL> INSERT INTO Orders (order_id, customer_id, order_date, total_order_amount) VALUES
+  2  (1002, 103, '12-May-2023', 800.50);
+INSERT INTO Orders (order_id, customer_id, order_date, total_order_amount) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007424) violated 
+
+
+SQL> INSERT INTO Orders (order_id, customer_id, order_date, total_order_amount) VALUES
+  2  (1003, 104, '14-May-2023', 2300.75);
+INSERT INTO Orders (order_id, customer_id, order_date, total_order_amount) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007424) violated 
+
+
+SQL> INSERT INTO Orders (order_id, customer_id, order_date, total_order_amount) VALUES
+  2  (1004, 104, '16-May-2023', 450.20);
+INSERT INTO Orders (order_id, customer_id, order_date, total_order_amount) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007424) violated 
+
+
+SQL> INSERT INTO Orders (order_id, customer_id, order_date, total_order_amount) VALUES
+  2  (1005, 105, '25-May-2023', 1200.00);
+INSERT INTO Orders (order_id, customer_id, order_date, total_order_amount) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007424) violated 
+
+
+SQL> INSERT INTO Orders (order_id, customer_id, order_date, total_order_amount) VALUES
+  2  (1006, 106, '16-JUN-2023', 300.75);
+INSERT INTO Orders (order_id, customer_id, order_date, total_order_amount) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007424) violated 
+
+
+SQL> INSERT INTO Orders (order_id, customer_id, order_date, total_order_amount) VALUES
+  2  (1007, 107, '20-AUG-2023', 750.00);
+INSERT INTO Orders (order_id, customer_id, order_date, total_order_amount) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007424) violated 
+
+
+SQL> INSERT INTO Orders (order_id, customer_id, order_date, total_order_amount) VALUES
+  2  (1008, 108, '25-JUN-2023', 1200.50);
+INSERT INTO Orders (order_id, customer_id, order_date, total_order_amount) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007424) violated 
+
+
+SQL> INSERT INTO Orders (order_id, customer_id, order_date, total_order_amount) VALUES
+  2  (1009, 109, '25-AUG-2023', 300.75);
+INSERT INTO Orders (order_id, customer_id, order_date, total_order_amount) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007424) violated 
+
+
+SQL> INSERT INTO Orders (order_id, customer_id, order_date, total_order_amount) VALUES
+  2  (1010, 110, '28-DEC-2023', 500.20);
+INSERT INTO Orders (order_id, customer_id, order_date, total_order_amount) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007424) violated 
+
+
+SQL> 
+SQL> INSERT INTO Invoices (invoice_id, order_id, customer_id, payment_option, total_amount) VALUES
+  2  (2001, 1001, 101, 'Credit Card', 1350.00);
+
+1 row created.
+
+SQL> INSERT INTO Invoices (invoice_id, order_id, customer_id, payment_option, total_amount) VALUES
+  2  (2002, 1002, 102, 'Cash', 800.50);
+
+1 row created.
+
+SQL> INSERT INTO Invoices (invoice_id, order_id, customer_id, payment_option, total_amount) VALUES
+  2  (2003, 1003, 103, 'PayPal', 2100.75);
+
+1 row created.
+
+SQL> INSERT INTO Invoices (invoice_id, order_id, customer_id, payment_option, total_amount) VALUES
+  2  (2004, 1004, 104, 'Credit Card', 430.20);
+
+1 row created.
+
+SQL> INSERT INTO Invoices (invoice_id, order_id, customer_id, payment_option, total_amount) VALUES
+  2  (2005, 1005, 105, 'Cash', 1100.00);
+
+1 row created.
+
+SQL> INSERT INTO Invoices (invoice_id, order_id, customer_id, payment_option, total_amount) VALUES
+  2  (2006, 1006, 106, 'PayPal', 280.75);
+
+1 row created.
+
+SQL> INSERT INTO Invoices (invoice_id, order_id, customer_id, payment_option, total_amount) VALUES
+  2  (2007, 1007, 107, 'Credit Card', 720.00);
+
+1 row created.
+
+SQL> INSERT INTO Invoices (invoice_id, order_id, customer_id, payment_option, total_amount) VALUES
+  2  (2008, 1008, 108, 'Cash', 1200.50);
+
+1 row created.
+
+SQL> INSERT INTO Invoices (invoice_id, order_id, customer_id, payment_option, total_amount) VALUES
+  2  (2009, 1009, 109, 'PayPal', 300.75);
+
+1 row created.
+
+SQL> INSERT INTO Invoices (invoice_id, order_id, customer_id, payment_option, total_amount) VALUES
+  2  (2010, 1010, 110, 'Credit Card', 480.20);
+
+1 row created.
+
+SQL> 
+SQL> 
+SQL> INSERT INTO Vendors (vendor_id, vendor_name, vendor_phone_number) VALUES
+  2  (301, 'Electronic Devices Nepal', '977-9812345678');
+INSERT INTO Vendors (vendor_id, vendor_name, vendor_phone_number) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007429) violated 
+
+
+SQL> INSERT INTO Vendors (vendor_id, vendor_name, vendor_phone_number) VALUES
+  2  (302, 'Electronic Devices Suppliers', '977-9845678901');
+INSERT INTO Vendors (vendor_id, vendor_name, vendor_phone_number) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007429) violated 
+
+
+SQL> INSERT INTO Vendors (vendor_id, vendor_name, vendor_phone_number) VALUES
+  2  (303, 'Electronic Devices Distributors', '977-9801234567');
+INSERT INTO Vendors (vendor_id, vendor_name, vendor_phone_number) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007429) violated 
+
+
+SQL> INSERT INTO Vendors (vendor_id, vendor_name, vendor_phone_number) VALUES
+  2  (304, 'Electronic Devices Publishers', '977-9812345678');
+INSERT INTO Vendors (vendor_id, vendor_name, vendor_phone_number) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007429) violated 
+
+
+SQL> INSERT INTO Vendors (vendor_id, vendor_name, vendor_phone_number) VALUES
+  2  (305, 'Electronic Devices International', '977-9856789012');
+INSERT INTO Vendors (vendor_id, vendor_name, vendor_phone_number) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007429) violated 
+
+
+SQL> INSERT INTO Vendors (vendor_id, vendor_name, vendor_phone_number) VALUES
+  2  (306, 'Electronic Devices Fashion', '977-9812345678');
+INSERT INTO Vendors (vendor_id, vendor_name, vendor_phone_number) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007429) violated 
+
+
+SQL> INSERT INTO Vendors (vendor_id, vendor_name, vendor_phone_number) VALUES
+  2  (307, 'Electronic Devices Essentials Global', '977-9845678901');
+INSERT INTO Vendors (vendor_id, vendor_name, vendor_phone_number) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007429) violated 
+
+
+SQL> INSERT INTO Vendors (vendor_id, vendor_name, vendor_phone_number) VALUES
+  2  (308, 'Electronic Devices Distributors', '977-9812345678');
+INSERT INTO Vendors (vendor_id, vendor_name, vendor_phone_number) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007429) violated 
+
+
+SQL> INSERT INTO Vendors (vendor_id, vendor_name, vendor_phone_number) VALUES
+  2  (309, 'Electronic Devices Adventure Suppliers', '977-9801234567');
+INSERT INTO Vendors (vendor_id, vendor_name, vendor_phone_number) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007429) violated 
+
+
+SQL> INSERT INTO Vendors (vendor_id, vendor_name, vendor_phone_number) VALUES
+  2  (310, 'Electronic Devices Brands', '977-9876543210');
+INSERT INTO Vendors (vendor_id, vendor_name, vendor_phone_number) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007429) violated 
+
+
+SQL> 
+SQL> 
+SQL> INSERT INTO productCategory (category_id, category_name) VALUES
+  2  (11, 'Smartphones');
+INSERT INTO productCategory (category_id, category_name) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007430) violated 
+
+
+SQL> INSERT INTO productCategory (category_id, category_name) VALUES
+  2  (12, 'Laptops');
+INSERT INTO productCategory (category_id, category_name) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007430) violated 
+
+
+SQL> INSERT INTO productCategory (category_id, category_name) VALUES
+  2  (13, 'Smartwatches');
+INSERT INTO productCategory (category_id, category_name) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007430) violated 
+
+
+SQL> INSERT INTO productCategory (category_id, category_name) VALUES
+  2  (14, 'Tablets');
+INSERT INTO productCategory (category_id, category_name) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007430) violated 
+
+
+SQL> INSERT INTO productCategory (category_id, category_name) VALUES
+  2  (15, 'Audio Devices');
+INSERT INTO productCategory (category_id, category_name) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007430) violated 
+
+
+SQL> INSERT INTO productCategory (category_id, category_name) VALUES
+  2  (16, 'Camera and Photography');
+INSERT INTO productCategory (category_id, category_name) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007430) violated 
+
+
+SQL> INSERT INTO productCategory (category_id, category_name) VALUES
+  2  (17, 'Gaming Consoles');
+INSERT INTO productCategory (category_id, category_name) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007430) violated 
+
+
+SQL> INSERT INTO productCategory (category_id, category_name) VALUES
+  2  (18, 'Home Automation');
+INSERT INTO productCategory (category_id, category_name) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007430) violated 
+
+
+SQL> INSERT INTO productCategory (category_id, category_name) VALUES
+  2  (19, 'Wearable Tech');
+INSERT INTO productCategory (category_id, category_name) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007430) violated 
+
+
+SQL> INSERT INTO productCategory (category_id, category_name) VALUES
+  2  (20, 'Virtual Reality');
+INSERT INTO productCategory (category_id, category_name) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007430) violated 
+
+
+SQL> 
+SQL> 
+SQL> INSERT INTO Products (product_id, product_name, description, category_id, price, stock_quantity, vendor_id) VALUES
+  2  (501, 'iPhone 12', 'Latest smartphone from Apple', 11, 1200.00, 50, 301);
+INSERT INTO Products (product_id, product_name, description, category_id, price, stock_quantity, vendor_id) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007431) violated 
+
+
+SQL> INSERT INTO Products (product_id, product_name, description, category_id, price, stock_quantity, vendor_id) VALUES
+  2  (502, 'Dell XPS 13', 'Ultra-thin laptop for professionals', 12, 1500.00, 30, 301);
+INSERT INTO Products (product_id, product_name, description, category_id, price, stock_quantity, vendor_id) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007431) violated 
+
+
+SQL> INSERT INTO Products (product_id, product_name, description, category_id, price, stock_quantity, vendor_id) VALUES
+  2  (503, 'Smartwatch X Pro', 'Advanced smartwatch with health tracking', 13, 25.00, 100, 301);
+INSERT INTO Products (product_id, product_name, description, category_id, price, stock_quantity, vendor_id) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007431) violated 
+
+
+SQL> INSERT INTO Products (product_id, product_name, description, category_id, price, stock_quantity, vendor_id) VALUES
+  2  (504, 'GadgetPad Pro', 'High-performance tablet for productivity', 14, 80.00, 20, 303);
+INSERT INTO Products (product_id, product_name, description, category_id, price, stock_quantity, vendor_id) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007431) violated 
+
+
+SQL> INSERT INTO Products (product_id, product_name, description, category_id, price, stock_quantity, vendor_id) VALUES
+  2  (505, 'Wireless Earbuds', 'Immersive audio experience with noise cancellation', 15, 15.00, 50, 304);
+INSERT INTO Products (product_id, product_name, description, category_id, price, stock_quantity, vendor_id) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007431) violated 
+
+
+SQL> INSERT INTO Products (product_id, product_name, description, category_id, price, stock_quantity, vendor_id) VALUES
+  2  (506, 'Professional DSLR Camera', 'Capture stunning photos and videos', 16, 40.00, 15, 306);
+INSERT INTO Products (product_id, product_name, description, category_id, price, stock_quantity, vendor_id) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007431) violated 
+
+
+SQL> INSERT INTO Products (product_id, product_name, description, category_id, price, stock_quantity, vendor_id) VALUES
+  2  (507, 'Gaming Console X', 'Next-gen gaming console for ultimate gaming experience', 16, 1100.00, 60, 304);
+INSERT INTO Products (product_id, product_name, description, category_id, price, stock_quantity, vendor_id) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007431) violated 
+
+
+SQL> INSERT INTO Products (product_id, product_name, description, category_id, price, stock_quantity, vendor_id) VALUES
+  2  (508, 'Smart Home Starter Kit', 'Automate your home with smart devices', 17, 1700.00, 25, 301);
+INSERT INTO Products (product_id, product_name, description, category_id, price, stock_quantity, vendor_id) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007431) violated 
+
+
+SQL> INSERT INTO Products (product_id, product_name, description, category_id, price, stock_quantity, vendor_id) VALUES
+  2  (509, 'Fitness Tracker Band', 'Track your fitness goals with style', 18, 50.00, 75, 306);
+INSERT INTO Products (product_id, product_name, description, category_id, price, stock_quantity, vendor_id) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007431) violated 
+
+
+SQL> INSERT INTO Products (product_id, product_name, description, category_id, price, stock_quantity, vendor_id) VALUES
+  2  (510, 'Blender', 'High-performance blender for smoothies and more', 19, 120.00, 30, 304);
+INSERT INTO Products (product_id, product_name, description, category_id, price, stock_quantity, vendor_id) VALUES
+*
+ERROR at line 1:
+ORA-00001: unique constraint (RAAMESHWOOR.SYS_C007431) violated 
+
+
+SQL> 
+SQL> 
+SQL> INSERT INTO OrderProduct (order_id, product_id, quantity, unit_price) VALUES
+  2  (1001, 501, 2, 1200.00);
+
+1 row created.
+
+SQL> INSERT INTO OrderProduct (order_id, product_id, quantity, unit_price) VALUES
+  2  (1002, 503, 5, 25.00);
+
+1 row created.
+
+SQL> INSERT INTO OrderProduct (order_id, product_id, quantity, unit_price) VALUES
+  2  (1003, 502, 1, 1500.00);
+
+1 row created.
+
+SQL> INSERT INTO OrderProduct (order_id, product_id, quantity, unit_price) VALUES
+  2  (1004, 504, 1, 80.00);
+
+1 row created.
+
+SQL> INSERT INTO OrderProduct (order_id, product_id, quantity, unit_price) VALUES
+  2  (1005, 505, 3, 15.00);
+
+1 row created.
+
+SQL> INSERT INTO OrderProduct (order_id, product_id, quantity, unit_price) VALUES
+  2  (1006, 506, 2, 40.00);
+
+1 row created.
+
+SQL> INSERT INTO OrderProduct (order_id, product_id, quantity, unit_price) VALUES
+  2  (1007, 507, 1, 1100.00);
+
+1 row created.
+
+SQL> INSERT INTO OrderProduct (order_id, product_id, quantity, unit_price) VALUES
+  2  (1008, 509, 3, 50.00);
+
+1 row created.
+
+SQL> INSERT INTO OrderProduct (order_id, product_id, quantity, unit_price) VALUES
+  2  (1009, 508, 1, 1700.00);
+
+1 row created.
+
+SQL> INSERT INTO OrderProduct (order_id, product_id, quantity, unit_price) VALUES
+  2  (1010, 510, 2, 120.00);
+
+1 row created.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> SELECT * FROM TAB;
+
+TNAME                          TABTYPE  CLUSTERID                               
+------------------------------ ------- ----------                               
+CATEGORIES                     TABLE                                            
+CUSTOMERS                      TABLE                                            
+INVOICES                       TABLE                                            
+ORDERPRODUCT                   TABLE                                            
+ORDERS                         TABLE                                            
+PRODUCTCATEGORY                TABLE                                            
+PRODUCTS                       TABLE                                            
+VENDORS                        TABLE                                            
+
+8 rows selected.
+
+SQL> SELECT * FROM categories CG
+  2  JOIN customers c ON C.category_id = CG.category_id
+  3  WHERE CG.category_name = 'Staff'
+  4  
+SQL> SELECT * FROM categories CG
+  2  JOIN customers c ON C.category_id = CG.category_id
+  3  WHERE CG.category_name = 'Staff';
+
+CATEGORY_ID CATEGORY_NAME                            DISCOUNT_RATE CUSTOMER_ID  
+----------- ---------------------------------------- ------------- -----------  
+CATEGORY_ID CUSTOMER_NAME                                 CUSTOMER_PHONE        
+----------- --------------------------------------------- --------------        
+CUSTOMER_ADDRESS                                                                
+------------------------------------------------------------                    
+          2 Staff                                              .05         103  
+          2 Amit Khanal                                   977-9851122334        
+Bhaktapur, Nepal                                                                
+                                                                                
+          2 Staff                                              .05         105  
+          2 Bibek Joshi                                   977-9861122334        
+Butwal, Nepal                                                                   
+
+CATEGORY_ID CATEGORY_NAME                            DISCOUNT_RATE CUSTOMER_ID  
+----------- ---------------------------------------- ------------- -----------  
+CATEGORY_ID CUSTOMER_NAME                                 CUSTOMER_PHONE        
+----------- --------------------------------------------- --------------        
+CUSTOMER_ADDRESS                                                                
+------------------------------------------------------------                    
+                                                                                
+          2 Staff                                              .05         109  
+          2 Rajan Magar                                   977-9851122334        
+Bhaktapur, Nepal                                                                
+                                                                                
+
+SQL> set line size 200
+SP2-0268: linesize option not a valid number
+SQL> set linezise 200
+SP2-0158: unknown SET option "linezise"
+SQL> SET linesize 200
+SQL> SELECT * FROM categories CG
+  2  JOIN customers c ON C.category_id = CG.category_id
+  3  WHERE CG.category_name = 'Staff';
+
+CATEGORY_ID CATEGORY_NAME                            DISCOUNT_RATE CUSTOMER_ID CATEGORY_ID CUSTOMER_NAME                                 CUSTOMER_PHONE                                                 
+----------- ---------------------------------------- ------------- ----------- ----------- --------------------------------------------- --------------                                                 
+CUSTOMER_ADDRESS                                                                                                                                                                                        
+------------------------------------------------------------                                                                                                                                            
+          2 Staff                                              .05         103           2 Amit Khanal                                   977-9851122334                                                 
+Bhaktapur, Nepal                                                                                                                                                                                        
+                                                                                                                                                                                                        
+          2 Staff                                              .05         105           2 Bibek Joshi                                   977-9861122334                                                 
+Butwal, Nepal                                                                                                                                                                                           
+                                                                                                                                                                                                        
+          2 Staff                                              .05         109           2 Rajan Magar                                   977-9851122334                                                 
+Bhaktapur, Nepal                                                                                                                                                                                        
+                                                                                                                                                                                                        
+
+SQL> SET linesize 150
+SQL> SELECT * FROM categories CG
+  2  JOIN customers c ON C.category_id = CG.category_id
+  3  WHERE CG.category_name = 'Staff';
+
+CATEGORY_ID CATEGORY_NAME                            DISCOUNT_RATE CUSTOMER_ID CATEGORY_ID CUSTOMER_NAME                                              
+----------- ---------------------------------------- ------------- ----------- ----------- ---------------------------------------------              
+CUSTOMER_PHONE CUSTOMER_ADDRESS                                                                                                                       
+-------------- ------------------------------------------------------------                                                                           
+          2 Staff                                              .05         103           2 Amit Khanal                                                
+977-9851122334 Bhaktapur, Nepal                                                                                                                       
+                                                                                                                                                      
+          2 Staff                                              .05         105           2 Bibek Joshi                                                
+977-9861122334 Butwal, Nepal                                                                                                                          
+                                                                                                                                                      
+          2 Staff                                              .05         109           2 Rajan Magar                                                
+977-9851122334 Bhaktapur, Nepal                                                                                                                       
+                                                                                                                                                      
+
+SQL> SET linesize 250
+SQL> SELECT * FROM categories CG
+  2  JOIN customers c ON C.category_id = CG.category_id
+  3  WHERE CG.category_name = 'Staff';
+
+CATEGORY_ID CATEGORY_NAME                            DISCOUNT_RATE CUSTOMER_ID CATEGORY_ID CUSTOMER_NAME                                 CUSTOMER_PHONE CUSTOMER_ADDRESS                                                                                  
+----------- ---------------------------------------- ------------- ----------- ----------- --------------------------------------------- -------------- ------------------------------------------------------------                                      
+          2 Staff                                              .05         103           2 Amit Khanal                                   977-9851122334 Bhaktapur, Nepal                                                                                  
+          2 Staff                                              .05         105           2 Bibek Joshi                                   977-9861122334 Butwal, Nepal                                                                                     
+          2 Staff                                              .05         109           2 Rajan Magar                                   977-9851122334 Bhaktapur, Nepal                                                                                  
+
+SQL> SELECT O.order_id, O.customer_id, O.order_date, OP.product_id, P.product_name, OP.quantity, OP.unit_price
+  2  FROM orders O
+  3  JOIN orderProduct OP ON O.order_id = OP.order_id
+  4  JOIN products P ON OP.product_id = P.product_id
+  5  WHERE O.order_date BETWEEN ('01-MAY-2023') AND ('28-MAY-2023');
+
+  ORDER_ID CUSTOMER_ID ORDER_DAT PRODUCT_ID PRODUCT_NAME                                                   QUANTITY UNIT_PRICE                                                                                                                            
+---------- ----------- --------- ---------- ------------------------------------------------------------ ---------- ----------                                                                                                                            
+      1003         104 14-MAY-23        502 Dell XPS 13                                                           1       1500                                                                                                                            
+      1002         103 12-MAY-23        503 Smartwatch X Pro                                                      5         25                                                                                                                            
+      1004         104 16-MAY-23        504 GadgetPad Pro                                                         1         80                                                                                                                            
+      1005         105 25-MAY-23        505 Wireless Earbuds                                                      3         15                                                                                                                            
+
+SQL> SELECT C.customer_id, C.customer_name, C.customer_phone, C.customer_address,
+  2  O.order_id, O.order_date, O.total_order_amount
+  3  FROM customers C
+  4  LEFT JOIN orders O ON C.customer_id = O.customer_id
+  5  WHERE O.order_id IS NOT NULL;
+
+CUSTOMER_ID CUSTOMER_NAME                                 CUSTOMER_PHONE CUSTOMER_ADDRESS                                               ORDER_ID ORDER_DAT TOTAL_ORDER_AMOUNT                                                                             
+----------- --------------------------------------------- -------------- ------------------------------------------------------------ ---------- --------- ------------------                                                                             
+        101 Rajesh Shrestha                               977-9841234567 Kathmandu, Nepal                                                   1001 12-JAN-23               1500                                                                             
+        103 Amit Khanal                                   977-9851122334 Bhaktapur, Nepal                                                   1002 12-MAY-23              800.5                                                                             
+        104 Anita Rai                                     977-9808765432 Lalitpur, Nepal                                                    1003 14-MAY-23            2300.75                                                                             
+        104 Anita Rai                                     977-9808765432 Lalitpur, Nepal                                                    1004 16-MAY-23              450.2                                                                             
+        105 Bibek Joshi                                   977-9861122334 Butwal, Nepal                                                      1005 25-MAY-23               1200                                                                             
+        106 Neha Sharma                                   977-9843322111 Dharan, Nepal                                                      1006 16-JUN-23             300.75                                                                             
+        107 Suresh Tamang                                 977-9812345678 Kathmandu, Nepal                                                   1007 20-AUG-23                750                                                                             
+        108 Rina Ghimire                                  977-9845678901 Pokhara, Nepal                                                     1008 25-JUN-23             1200.5                                                                             
+        109 Rajan Magar                                   977-9851122334 Bhaktapur, Nepal                                                   1009 25-AUG-23             300.75                                                                             
+        110 Anjali Bhattarai                              977-9808765432 Lalitpur, Nepal                                                    1010 28-DEC-23              500.2                                                                             
+
+10 rows selected.
+
+SQL> SELECT *
+  2  FROM products
+  3  WHERE product_name LIKE '_a%'
+  4  AND stock_quantity > 50;
+
+PRODUCT_ID PRODUCT_NAME                                                 DESCRIPTION                                                  CATEGORY_ID      PRICE STOCK_QUANTITY  VENDOR_ID                                                                     
+---------- ------------------------------------------------------------ ------------------------------------------------------------ ----------- ---------- -------------- ----------                                                                     
+       507 Gaming Console X                                             Next-gen gaming console for ultimate gaming experience                16       1100             60        304                                                                     
+
+SQL> SELECT C.customer_id, C.customer_name, C.customer_phone, C.customer_address,
+  2  O.order_id, O.order_date, O.total_order_amount
+  3  FROM customers C
+  4  JOIN orders O ON C.customer_id = O.customer_id
+  5  WHERE O.order_date = (SELECT MAX(order_date) FROM orders);
+
+CUSTOMER_ID CUSTOMER_NAME                                 CUSTOMER_PHONE CUSTOMER_ADDRESS                                               ORDER_ID ORDER_DAT TOTAL_ORDER_AMOUNT                                                                             
+----------- --------------------------------------------- -------------- ------------------------------------------------------------ ---------- --------- ------------------                                                                             
+        110 Anjali Bhattarai                              977-9808765432 Lalitpur, Nepal                                                    1010 28-DEC-23              500.2                                                                             
+
+SQL> SELECT TO_CHAR(order_date, 'YYYY-MM') AS Month,
+  2  SUM(total_order_amount) AS Total_revenue
+  3  FROM Orders
+  4  GROUP BY TO_CHAR(order_date, 'YYYY-MM')
+  5  ORDER BY Month;
+
+MONTH   TOTAL_REVENUE                                                                                                                                                                                                                                     
+------- -------------                                                                                                                                                                                                                                     
+2023-01          1500                                                                                                                                                                                                                                     
+2023-05       4751.45                                                                                                                                                                                                                                     
+2023-06       1501.25                                                                                                                                                                                                                                     
+2023-08       1050.75                                                                                                                                                                                                                                     
+2023-12         500.2                                                                                                                                                                                                                                     
+
+SQL> SELECT *
+  2  FROM orders
+  3  WHERE total_order_amount >= (SELECT AVG(total_order_amount) FROM Orders);
+
+  ORDER_ID CUSTOMER_ID ORDER_DAT TOTAL_ORDER_AMOUNT                                                                                                                                                                                                       
+---------- ----------- --------- ------------------                                                                                                                                                                                                       
+      1001         101 12-JAN-23               1500                                                                                                                                                                                                       
+      1003         104 14-MAY-23            2300.75                                                                                                                                                                                                       
+      1005         105 25-MAY-23               1200                                                                                                                                                                                                       
+      1008         108 25-JUN-23             1200.5                                                                                                                                                                                                       
+
+SQL> SELECT v.vendor_id, v.vendor_name, v.vendor_phone_number, COUNT(p.product_id) AS total_products_supplied
+  2  FROM Vendors v
+  3  JOIN Products p ON v.vendor_id = p.vendor_id
+  4  GROUP BY v.vendor_id, v.vendor_name, v.vendor_phone_number
+  5  HAVING COUNT(p.product_id) > 3
+  6  ORDER BY total_products_supplied DESC;
+
+ VENDOR_ID VENDOR_NAME                                   VENDOR_PHONE_N TOTAL_PRODUCTS_SUPPLIED                                                                                                                                                           
+---------- --------------------------------------------- -------------- -----------------------                                                                                                                                                           
+       301 Electronic Devices Nepal                      977-9812345678                       4                                                                                                                                                           
+
+SQL> SELECT p.product_id, p.product_name, COUNT(op.product_id) AS total_orders
+  2  FROM Products p
+  3  JOIN OrderProduct op ON p.product_id = op.product_id
+  4  GROUP BY p.product_id, p.product_name
+  5  ORDER BY total_orders DESC
+  6  FETCH FIRST 3 ROWS ONLY;
+FETCH FIRST 3 ROWS ONLY
+*
+ERROR at line 6:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT c.customer_id, c.customer_name,
+  2  SUM(o.total_order_amount) AS total_spending_in_august
+  3  FROM Customers c
+  4  JOIN Orders o ON c.customer_id = o.customer_id
+  5  WHERE TO_CHAR(o.order_date, 'MM') = '08'
+  6  AND TO_CHAR(o.order_date, 'YYYY') = '2023'
+  7  GROUP BY c.customer_id, c.customer_name
+  8  ORDER BY total_spending_in_august DESC
+  9  FETCH FIRST 1 ROW ONLY;
+FETCH FIRST 1 ROW ONLY
+*
+ERROR at line 9:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT p.product_id, p.product_name, COUNT(op.product_id) AS total_orders
+  2  FROM Products p
+  3  JOIN OrderProduct op ON p.product_id = op.product_id
+  4  GROUP BY p.product_id, p.product_name
+  5  ORDER BY total_orders DESC
+  6  FETCH FIRST 3 ROWS ONLY;
+FETCH FIRST 3 ROWS ONLY
+*
+ERROR at line 6:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT p.product_id, p.product_name, COUNT(op.product_id) AS total_orders
+  2  FROM Products p
+  3  JOIN OrderProduct op ON p.product_id = op.product_id
+  4  GROUP BY p.product_id, p.product_name
+  5  ORDER BY total_orders DESC
+  6  FETCH FIRST 3 ROWS ONLY;
+FETCH FIRST 3 ROWS ONLY
+*
+ERROR at line 6:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT p.product_id, p.product_name, COUNT(op.product_id) AS total_orders
+  2  FROM Products p
+  3  JOIN OrderProduct op ON p.product_id = op.product_id
+  4  GROUP BY p.product_id, p.product_name
+  5  ORDER BY total_orders DESC;
+
+PRODUCT_ID PRODUCT_NAME                                                 TOTAL_ORDERS                                                                                                                                                                      
+---------- ------------------------------------------------------------ ------------                                                                                                                                                                      
+       504 GadgetPad Pro                                                           1                                                                                                                                                                      
+       505 Wireless Earbuds                                                        1                                                                                                                                                                      
+       502 Dell XPS 13                                                             1                                                                                                                                                                      
+       507 Gaming Console X                                                        1                                                                                                                                                                      
+       509 Fitness Tracker Band                                                    1                                                                                                                                                                      
+       508 Smart Home Starter Kit                                                  1                                                                                                                                                                      
+       510 Blender                                                                 1                                                                                                                                                                      
+       501 iPhone 12                                                               1                                                                                                                                                                      
+       503 Smartwatch X Pro                                                        1                                                                                                                                                                      
+       506 Professional DSLR Camera                                                1                                                                                                                                                                      
+
+10 rows selected.
+
+SQL> SELECT c.customer_id, c.customer_name,
+  2  SUM(o.total_order_amount) AS total_spending_in_august
+  3  FROM Customers c
+  4  JOIN Orders o ON c.customer_id = o.customer_id
+  5  WHERE TO_CHAR(o.order_date, 'MM') = '08'
+  6  AND TO_CHAR(o.order_date, 'YYYY') = '2023'
+  7  GROUP BY c.customer_id, c.customer_name
+  8  ORDER BY total_spending_in_august DESC;
+
+CUSTOMER_ID CUSTOMER_NAME                                 TOTAL_SPENDING_IN_AUGUST                                                                                                                                                                        
+----------- --------------------------------------------- ------------------------                                                                                                                                                                        
+        107 Suresh Tamang                                                      750                                                                                                                                                                        
+        109 Rajan Magar                                                     300.75                                                                                                                                                                        
+
+SQL> spool off;
